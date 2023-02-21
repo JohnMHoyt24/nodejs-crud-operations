@@ -36,6 +36,30 @@ router.get("/:email",(req,res)=>{
     res.send(filtered_users);
 });
 
+// GET by specific last name: Retrieve all users with last name
+router.get("/lastName/:lastName",(req,res)=>{
+    const lastName = req.params.lastName;
+    let filtered_users = users.filter((user) => user.lastName === lastName);
+    res.send(filtered_users);
+});
+
+//This function takes the date value and converts from String to Date
+function getDateFromString(strDate){
+    let [dd,mm,yyyy] = strDate.split('-');
+    return new Date(yyyy+"/"+mm+"/"+dd);
+}
+
+/*The getDateFromString() function is called and DOB is sorted
+by the difference between d1 and d2.*/
+router.get("/sort", (req,res) => {
+    let sorted_users = users.sort(function(a, b) {
+        let d1 = getDateFromString(a.DOB);
+        let d2 = getDateFromString(b.DOB);
+        return d1-d2;
+    });
+    res.send(sorted_users);
+});
+
 // POST request: Create a new user
 router.post("/",(req,res)=>{
     users.push({"firstName":req.query.firstName,"lastName":req.query.lastName,"email":req.query.email,"DOB":req.query.DOB});

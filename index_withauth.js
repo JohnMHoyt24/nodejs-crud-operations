@@ -6,6 +6,16 @@ const session = require('express-session')
 const app = express();
 const PORT =5000;
 
+/*
+    secret - a random unique string key used to authenticate a session.
+    resave - takes a Boolean value. It enables the session to be stored 
+            back to the session store, even if the session was never
+            modified during the request.
+    saveUninitialized - this allows any uninitialized session to be sent 
+            to the store. When a session is created but not modified, it 
+            is referred to as uninitialized.  
+
+*/
 app.use(session({secret:"fingerpint",resave: true, saveUninitialized: true}))
 
 app.use(express.json());
@@ -39,7 +49,7 @@ app.post("/login", (req,res) => {
     }
     let accessToken = jwt.sign({
         data: user
-      }, 'access', { expiresIn: 60 * 60 });
+      }, 'access', { expiresIn: 60 * 60 }); //Access token expires in 60mins x 60secs
 
       req.session.authorization = {
         accessToken
